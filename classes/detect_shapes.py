@@ -29,6 +29,7 @@ def detect_frame_coordinates(image):
         # cv2.drawContours(image, [c], -1, (0, 255, 0), 2)
         x, y, w, h = cv2.boundingRect(c)
         if w > 50 and h > 50:
+            print('cos')
             black_white_recognized_image = image[y:y + h, x:x + w]
 
     cv2.imshow("Image", black_white_recognized_image)
