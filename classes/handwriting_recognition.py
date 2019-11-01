@@ -34,13 +34,11 @@ def take_frame_out_of_image(frame):
 
     cropped_image_frame_original = cv.resize(cropped_image_original, dim, interpolation=cv.INTER_AREA)
     resized_image_black_white = cv.resize(cropped_image_black_white, dim, interpolation=cv.INTER_AREA)
-    cv.imwrite('D:\\PROGRAMOWANIE\\Python programy\\OMR-handwriting-features-recognition\\test_image.jpg',
-               resized_image_black_white)
+
     cv.imshow('Resized black and white', resized_image_black_white)
     x, y, w, h = detect_frame_coordinates(resized_image_black_white)
     cropped_image_frame_original = cropped_image_frame_original[y:y + h, x:x + w]
     cv.imshow('Cropped image frame original', cropped_image_frame_original)
-    cv.imwrite('..\\images\\example.jpeg', cropped_image_frame_original)
 
     cv.waitKey(0)
     cv.destroyAllWindows()
