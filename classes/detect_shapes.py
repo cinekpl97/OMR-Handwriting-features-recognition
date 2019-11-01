@@ -26,7 +26,7 @@ def detect_frame_coordinates(image):
         c = c.astype("float")
         c *= ratio
         c = c.astype("int")
-        # cv2.drawContours(image, [c], -1, (0, 255, 0), 2)
+        cv2.drawContours(image, [c], -1, (0, 255, 0), 2)
         x, y, w, h = cv2.boundingRect(c)
         if w > 50 and h > 50:
             black_white_recognized_image = image[y:y + h, x:x + w]

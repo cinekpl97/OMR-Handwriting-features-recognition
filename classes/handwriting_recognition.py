@@ -13,8 +13,10 @@ def take_frame_out_of_image(frame):
     cropped_y1 = 50
     cropped_y2 = int(frame.shape[1] - frame.shape[1] / 30)
 
+    # cropping just a frame with brackets assigned for handwriting
     cropped_image_original = frame[cropped_x1:cropped_x2, cropped_y1:cropped_y2]
 
+    # creating copy of image (problem with overwriting original one)
     cropped_image_black_white = cropped_image_original.copy()
 
     gray = cv.cvtColor(cropped_image_black_white, cv.COLOR_BGR2GRAY)
@@ -36,8 +38,11 @@ def take_frame_out_of_image(frame):
     resized_image_black_white = cv.resize(cropped_image_black_white, dim, interpolation=cv.INTER_AREA)
 
     cv.imshow('Resized black and white', resized_image_black_white)
+
+    # taking coords from black_white picture to use them with origin one
     x, y, w, h = detect_frame_coordinates(resized_image_black_white)
     cropped_image_frame_original = cropped_image_frame_original[y:y + h, x:x + w]
+
     cv.imshow('Cropped image frame original', cropped_image_frame_original)
 
     cv.waitKey(0)
