@@ -8,10 +8,13 @@ from classes.detect_shapes import detect_frame_coordinates
 
 
 def take_frame_out_of_image(frame):
-    cropped_image_original = frame[int(frame.shape[0] / 1.8):int(frame.shape[0] / 1.5 + frame.shape[0] / 8),
-                             50:int(frame.shape[1] - frame.shape[1] / 30)]
+    cropped_x1 = int(frame.shape[0] / 1.8)
+    cropped_x2 = int(frame.shape[0] / 1.5 + frame.shape[0] / 8)
+    cropped_y1 = 50
+    cropped_y2 = int(frame.shape[1] - frame.shape[1] / 30)
+    cropped_image_original = frame[cropped_x1:cropped_x2, cropped_y1:cropped_y2]
     cropped_image_black_white = cropped_image_original.copy()
-    cv.imshow('as',cropped_image_black_white)
+    cv.imshow('as', cropped_image_black_white)
     gray = cv.cvtColor(cropped_image_black_white, cv.COLOR_BGR2GRAY)
 
     ret, thresh = cv.threshold(gray, 200, 255, cv.THRESH_BINARY)
