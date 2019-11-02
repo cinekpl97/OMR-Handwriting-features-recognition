@@ -33,4 +33,8 @@ def detect_frame_coordinates(image):
 
     cv2.imshow("Cropped image black/white", black_white_recognized_image)
     cv2.waitKey(0)
+    x += 10
+    y += 10
+    w -= 20
+    h -= 18
     return x, y, w, h
