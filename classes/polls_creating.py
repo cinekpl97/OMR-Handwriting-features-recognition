@@ -1,7 +1,7 @@
 import cv2 as cv
-
-amount_of_polls = 200
-for i in range(1, amount_of_polls + 1):
+starting_number = 200
+amount_of_polls = 300
+for i in range(starting_number, amount_of_polls + 1):
     image_path = '..\\images\\poll.png'
     image = cv.imread(image_path, cv.IMREAD_UNCHANGED)
     position = (180, 200)
