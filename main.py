@@ -1,6 +1,7 @@
 import cv2 as cv
 import numpy as np
 from classes.handwriting_recognition import take_frame_out_of_image
+import os, os.path
 
 
 def main():
@@ -9,9 +10,11 @@ def main():
 
 
 def start_image_analysis(amount_of_polls):
+    scanned_polls_path = 'images\\Scanned-polls'
+    print(os.listdir(scanned_polls_path))
     # image_path takes already filled polls
-    for i in range(1, amount_of_polls + 1):
-        image_path = f'images\\{i}.jpg'
+    for i in os.listdir(scanned_polls_path):
+        image_path = f'{scanned_polls_path}\\{i}'
         print(f'Chosen path: {image_path}')
         try:
             file = open(image_path)

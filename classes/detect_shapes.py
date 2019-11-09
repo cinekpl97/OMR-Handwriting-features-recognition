@@ -14,7 +14,7 @@ def detect_frame_coordinates(image):
     gray = cv2.cvtColor(resized_image, cv2.COLOR_BGR2GRAY)
     blurred = cv2.GaussianBlur(gray, (5, 5), 0)
     thresh = cv2.threshold(blurred, 60, 255, cv2.THRESH_BINARY)[1]
-    cv2.imshow('thresh', thresh)
+    # cv2.imshow('thresh', thresh)
     # find contours in the thresholded image and initialize the
     cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
                             cv2.CHAIN_APPROX_SIMPLE)
@@ -33,8 +33,8 @@ def detect_frame_coordinates(image):
 
     cv2.imshow("Cropped image black/white", black_white_recognized_image)
     cv2.waitKey(0)
-    x += 10
-    y += 10
+    x += 6
+    y += 5
     w -= 20
     h -= 18
     return x, y, w, h

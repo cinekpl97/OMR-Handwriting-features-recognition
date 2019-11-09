@@ -5,6 +5,64 @@ import numpy as np
 import time
 import imutils
 from classes.detect_shapes import detect_frame_coordinates
+from matplotlib import pyplot as plt
+
+
+def recognize_word(I):
+    # Params
+    maxArea = 1000
+    minArea = 5
+    cv.imshow('picture', I)
+    # Read image
+    image = I.copy()
+    # Convert to gray
+    Igray = cv.cvtColor(I, cv.COLOR_RGB2GRAY)
+
+    # Threshold
+    ret, Ithresh = cv.threshold(Igray, 0, 255, cv.THRESH_BINARY_INV + cv.THRESH_OTSU)
+
+    # Keep only small components but not to small
+    comp = cv.connectedComponentsWithStats(Ithresh)
+
+    labels = comp[1]
+    labelStats = comp[2]
+    labelAreas = labelStats[:, 4]
+
+    for compLabel in range(1, comp[0], 1):
+
+        if labelAreas[compLabel] > maxArea or labelAreas[compLabel] < minArea:
+            labels[labels == compLabel] = 0
+
+    labels[labels > 0] = 1
+
+    # Do dilation
+    se = cv.getStructuringElement(cv.MORPH_ELLIPSE, (25, 25))
+    IdilateText = cv.morphologyEx(labels.astype(np.uint8), cv.MORPH_DILATE, se)
+
+    # Find connected component again
+    comp = cv.connectedComponentsWithStats(IdilateText)
+
+    # Draw a rectangle around the text
+    labels = comp[1]
+    labelStats = comp[2]
+    # labelAreas = labelStats[:,4]
+
+    for compLabel in range(1, comp[0], 1):
+        cv.rectangle(I, (labelStats[compLabel, 0], labelStats[compLabel, 1]), (
+            labelStats[compLabel, 0] + labelStats[compLabel, 2], labelStats[compLabel, 1] + labelStats[compLabel, 3]),
+                     (0, 0, 255), 2)
+
+    I = I[labelStats[compLabel, 1]:labelStats[compLabel, 1] + labelStats[compLabel, 3],
+        labelStats[compLabel, 0]:labelStats[compLabel, 0] + labelStats[compLabel, 2]]
+    cv.imshow('recognizedwords', I)
+
+    imgray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+    ret, thresh = cv.threshold(imgray, 220, 255, 0)
+    cv.imshow('thresh', thresh)
+
+    contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    cv.drawContours(image, contours, -1, (0, 255, 0), 1)
+    cv.imshow('contours', image)
 
 
 def take_frame_out_of_image(frame):
@@ -37,13 +95,13 @@ def take_frame_out_of_image(frame):
     cropped_image_frame_original = cv.resize(cropped_image_original, dim, interpolation=cv.INTER_AREA)
     resized_image_black_white = cv.resize(cropped_image_black_white, dim, interpolation=cv.INTER_AREA)
 
-    cv.imshow('Resized black and white', resized_image_black_white)
+    # cv.imshow('Resized black and white', resized_image_black_white)
 
     # taking coords from black_white picture to use them with origin one
     x, y, w, h = detect_frame_coordinates(resized_image_black_white)
     cropped_image_frame_original = cropped_image_frame_original[y:y + h, x:x + w]
 
-    cv.imshow('Cropped image frame original', cropped_image_frame_original)
-
+    # cv.imshow('Cropped image frame original', cropped_image_frame_original)
+    # recognize_word(cropped_image_frame_original)
     cv.waitKey(0)
     cv.destroyAllWindows()
