@@ -11,6 +11,7 @@ class ShapeDetector:
         shape = "unidentified"
         peri = cv2.arcLength(c, True)
         approx = cv2.approxPolyDP(c, 0.04 * peri, True)
+        print(approx)
         if len(approx) == 4:
             (x, y, w, h) = cv2.boundingRect(approx)
             ar = w / float(h)

@@ -1,5 +1,6 @@
 import csv
 from collections import Counter
+import numpy as np
 
 
 # Class which contains all answers from Google Form Questionnaire
@@ -8,47 +9,46 @@ class SinglePersonQuestionnaire:
         self.FeaturesList = []
 
     def add_feature(self, value):
-        self.FeaturesList.append(value)
+        self.FeaturesList.append(int(value))
 
     ID = 0
     FeaturesList = []
     AgeCategory = 0
     Sex = ''
+    NormalImage = np.ndarray
+    CroppedImage = np.ndarray
 
 
-# new_answers contain dicts of answers
-new_answers = [{}]
-with open('..\\formularz.csv', 'r', encoding='utf-8') as csv_file:
-    answers = csv.DictReader(csv_file, delimiter=',', quotechar='"')
-    for row in answers:
-        new_answers.append(row)
+def return_questionaire_answers():
+    # new_answers contain dicts of answers
+    new_answers = [{}]
+    with open('D:\\PROGRAMOWANIE\\Python programy\\OMR-handwriting-features-recognition\\formularz.csv', 'r',
+              encoding='utf-8') as csv_file:
+        answers = csv.DictReader(csv_file, delimiter=',', quotechar='"')
+        for row in answers:
+            new_answers.append(row)
 
-# list of all people's answers
-listOfQuestionnaires = [SinglePersonQuestionnaire() for i in range(1, len(new_answers))]
+    # list of all people's answers
+    list_of_questionnaire = [SinglePersonQuestionnaire() for i in range(1, len(new_answers))]
 
-count = 1
-N = []
-# assigning answers to each person
-for questionnaire in listOfQuestionnaires:
-    questionnaire.ID = int(new_answers[count]['Identyfikator'])
-    questionnaire.AgeCategory = new_answers[count]['Wiek']
-    questionnaire.Sex = new_answers[count]['Plec']
-    for i in range(1, 17):
-        val = new_answers[count][f'{i}']
-        questionnaire.add_feature(val)
+    count = 1
+    N = []
+    # assigning answers to each person
+    for questionnaire in list_of_questionnaire:
+        questionnaire.ID = int(new_answers[count]['Identyfikator'])
+        questionnaire.AgeCategory = new_answers[count]['Wiek']
+        questionnaire.Sex = new_answers[count]['Plec']
+        for i in range(1, 17):
+            val = new_answers[count][f'{i}']
+            questionnaire.add_feature(val)
 
-    count += 1
-    N.append(int(questionnaire.ID))
+        count += 1
+        N.append(int(questionnaire.ID))
+        # print(questionnaire.FeaturesList[13])
 
-N.sort()
-C = Counter(N)
-print(N)
-print([k, ] * v for k, v in C.items())
-tmp = 0
-list_of_same_values = []
-for i in N:
-    if (i == tmp) and (i not in list_of_same_values):
-        list_of_same_values.append(i)
-    tmp = i
+    N.sort()
+    C = Counter(N)
+    print(N)
+    print([k, ] * v for k, v in C.items())
 
-print(list_of_same_values)
+    return list_of_questionnaire
